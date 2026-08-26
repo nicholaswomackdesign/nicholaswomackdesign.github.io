@@ -671,7 +671,7 @@ footer{padding-bottom:calc(64px + 54px)}
     <div class="col">
       <h2>Merchants did not understand how payments were related</h2>
       <p>The legacy table split transactions across two tabs, which were Card Sales and Refunds. Each tab's identification was easily understood, but the relationship between the two was not apparent.</p>
-      <p>When a merchant asked "where did my payment go?" they had to open one tab, find the sale, switch tabs, find the refund, and hold the recontructed relationship within their memory. Disputes weren't in Sales Activity at all, they lived in a separate experience entirely, which meant a merchant could miss a chargeback deadline without ever knowing one existed.</p>
+      <p>When a merchant asked "where did my payment go?" they had to open one tab, find the sale, switch tabs, find the refund, and hold the reconstructed relationship within their memory. Disputes weren't in Sales Activity at all, they lived in a separate experience entirely, which meant a merchant could miss a chargeback deadline without ever knowing one existed.</p>
 
       <div class="jobs">
         <div>
@@ -711,10 +711,10 @@ footer{padding-bottom:calc(64px + 54px)}
   <section class="sec chapter" id="s03">
     <p class="sec-num">03. Question</p>
     <div class="col">
-      <h2>The question was wether the merchants' mental model matched the grouped order structure</h2>
+      <h2>The question was whether the merchants' mental model matched the grouped order structure</h2>
       <p>Based on the new backend order-based structure, a card sale, its refund, and any dispute against it share a common group identifier. The hypothesis was that exposing that grouping in the activity table would make transaction relationships clear to merchants.</p>
       <p class="wide">Even with a three month deadline, it was important to allocate time for research and testing to avoid rushing a product that doesn't solve the problem.</p>
-      <p>I built three prototypes, each have a different interpretation of how the transaction's relationships were represented through the design. I tested each prototype againts two tasks.</p>
+      <p>I built three prototypes, each have a different interpretation of how the transaction's relationships were represented through the design. I tested each prototype against two tasks.</p>
     </div>
   </section>
 
@@ -789,7 +789,7 @@ footer{padding-bottom:calc(64px + 54px)}
         <h2><span class="sr-only">Rejected. </span>Exploration 2: Structural nesting</h2>
       </div>
       <p class="i">If the relationship is expressed structurally rather than through a shared number, does it become legible?</p>
-      <p class="wide">Parent rows represented the original sale. By expanding a row it revealed child rows for related refunds or disputes transactions. By removing the tabs the shared identifier was not the only way to make the relationship, but not the heirarchy reinfornced it..</p>
+      <p class="wide">Parent rows represented the original sale. By expanding a row it revealed child rows for related refunds or disputes transactions. By removing the tabs the shared identifier was not the only way to make the relationship, but not the hierarchy reinfornced it..</p>
 
       <div class="finding">
         <span class="tag">What I learned</span>
@@ -826,7 +826,7 @@ footer{padding-bottom:calc(64px + 54px)}
   <div class="stack">
     <div class="col">
       <h2>Pivot : The two explorations failed for the same reason</h2>
-      <p class="wide">Both were attempts to make the activity table explain the relationship between transactions. Merchants weren't opening Sales Activity to understand how their order connected across relatedorder events. They were opening it to locate a specific order.</p>
+      <p class="wide">Both were attempts to make the activity table explain the relationship between transactions. Merchants weren't opening Sales Activity to understand how their order connected across related order events. They were opening it to locate a specific order.</p>
       <p style="max-width:930px">The backend model organizes by orders as groups. Merchants organize by a single event in time. The error was assuming that a structure legible to the system would be digestible in the interface.</p>
     </div>
     <div class="disconfirm">
@@ -857,7 +857,7 @@ footer{padding-bottom:calc(64px + 54px)}
       </div>
       <div class="finding">
         <span class="tag">What happened</span>
-        <p>This matched what merchants encounter everywhere else. Other servcies such as Amazon, PayPal, Shopify, and Square all use order number, transaction ID, and confirmation number more or less interchangeably to mean one transaction corresponds to one number. Merchants arrived with that model already formed. Matching it was cheaper than teaching them a new one.</p>
+        <p>This matched what merchants encounter everywhere else. Other services such as Amazon, PayPal, Shopify, and Square all use order number, transaction ID, and confirmation number more or less interchangeably to mean one transaction corresponds to one number. Merchants arrived with that model already formed. Matching it was cheaper than teaching them a new one.</p>
       </div>
     </div>
   </section>
@@ -894,7 +894,7 @@ footer{padding-bottom:calc(64px + 54px)}
   <section class="sec">
     <div class="col">
       <h2>Relationship context revealed in details drawer</h2>
-      <p>Relationship context now lived where the merchant was eady to recieve the information.</p>
+      <p>Relationship context now lived where the merchant was ready to recieve the information.</p>
       <p class="wide">Opening any transaction reveals a status progression bar, full transaction details, and the transaction's history. From a refund or dispute," View original order" takes the merchant to the sale that generated it in one click.</p>
       <div class="finding">
         <p>The dispute drawer is the highest-stakes view in the system. Action required appears in red highlighting merchants to the option to fight the dispute.</p>
@@ -990,7 +990,7 @@ footer{padding-bottom:calc(64px + 54px)}
     <p class="sec-num">06. Next</p>
     <div class="col">
       <h2>Where I'd take it next</h2>
-      <p>For future iteration, I would enhance the satus experience to show a more detailed payment cycle. Additionally, create a high-level dashboard surfacing the metrics merchants check most, and cross-team alignment on the alert system that allows for a more cohesive experience acrooss platform.</p>
+      <p>For future iteration, I would enhance the status experience to show a more detailed payment cycle. Additionally, create a high-level dashboard surfacing the metrics merchants check most, and cross-team alignment on the alert system that allows for a more cohesive experience across platform.</p>
     </div>
   </section>
 
