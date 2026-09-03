@@ -1,0 +1,993 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Making Room for the Middle — Nicholas Womack</title>
+<meta name="description" content="Redesigning the benchmarking range chart at RiskMatch. Vertafore case study by Nicholas Womack.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&family=Open+Sans:ital,wght@0,400;0,600;1,400&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   TOKENS — same system as the Sales Activity case study.
+   Only --c-section and the panel tokens differ.
+   ============================================================ */
+:root{
+
+  /* ---------- COLOR ---------- */
+  --c-ink:        #0E1419;
+  --c-mid:        #5A6672;
+  --c-soft:       #8B96A1;
+  --c-rule:       #D6DEE5;
+  --c-card:       #F1F4F7;
+  --c-section:    #E65325;   /* RiskMatch accent — swap to #0D4470 to match Chase */
+  --c-pivot:      #031C39;
+  --c-link:       #12459B;
+  --c-shot-a:     #B9B9B9;
+  --c-shot-b:     #CFCFCF;
+  --c-white:      #FFFFFF;
+  --c-panel:      #DAEAF2;   /* figure panel fill */
+
+  /* ---------- FAMILIES ---------- */
+  --f-display: 'Archivo', system-ui, sans-serif;
+  --f-body:    'Open Sans', system-ui, sans-serif;
+  --f-serif:   'Source Serif 4', Georgia, serif;
+  --f-mono:    'IBM Plex Mono', ui-monospace, monospace;
+
+  /* ---------- TYPE ---------- */
+  --t-hero:     clamp(2.75rem, 5.67vw, 5.1rem);
+  --t-sub:      clamp(1.125rem, 1.67vw, 1.5rem);
+  --t-section:  clamp(1.75rem, 3.33vw, 3rem);
+  --t-h2:       clamp(1.5rem, 2.78vw, 2.5rem);
+  --t-body:     clamp(1rem, 1.389vw, 1.25rem);
+  --t-finding:  clamp(.8125rem, 1.11vw, 1rem);
+  --t-record:   clamp(.8125rem, 1.04vw, .9375rem);
+  --t-card-h:   clamp(.9375rem, 1.18vw, 1.0625rem);
+  --t-card-b:   clamp(.8125rem, 1.04vw, .9375rem);
+  --t-caption:  clamp(.75rem,.97vw,.875rem);
+  --t-mono:     clamp(.625rem, .76vw, .6875rem);
+  --t-embed:    .75rem;
+
+  --lh-hero:    .97;
+  --lh-h2:      1.12;
+  --lh-sub:     1.40;
+  --lh-body:    1.72;
+  --lh-section: 1.50;
+  --lh-record:  1.35;
+  --lh-card:    1.55;
+  --lh-disc:    1.55;
+
+  --ls-hero:    -.025em;
+  --ls-h2:      -.017em;
+  --ls-card:    -.01em;
+  --ls-mono:    .13em;
+  --ls-ask:     .08em;
+
+  /* ---------- LAYOUT ---------- */
+  --l-page:     1440px;
+  --l-hero-max: 1240px;
+  --l-hero-pad: clamp(20px, 2.22vw, 32px);
+  --l-pad:      clamp(20px, 6.94vw, 100px);
+  --l-col:      1176px;
+  --l-shot:     1150px;
+  --m-text:      660px;
+  --m-head:      891px;
+  --m-block:     740px;
+
+  /* ---------- SPACING ---------- */
+  --sp-block:   clamp(64px, 7.60vw, 110px);
+  --sp-top:     clamp(32px, 2.22vw, 32px);
+  --sp-head:    clamp(6px, .56vw, 8px);
+  --sp-sub:     clamp(36px, 4.44vw, 64px);
+  --sp-fig:     clamp(40px, 4.03vw, 58px);
+  --sp-para:    clamp(16px, 1.53vw, 22px);
+  --sp-h2:      clamp(22px, 2.08vw, 30px);
+  --sp-group:   clamp(28px, 3.06vw, 44px);
+  --sp-cards:   clamp(20px, 2.36vw, 34px);
+  --sp-cap:     8px;
+  --sp-two:     clamp(24px, 10.7vw, 154px);
+  --sp-pair:    clamp(20px, 2.71vw, 39px);
+  --sp-trio:    clamp(20px, 2.78vw, 40px);
+  --sp-embed:   clamp(28px, 3.61vw, 52px);
+
+  /* ---------- PANEL ---------- */
+  --sp-panel:   clamp(24px, 5.2vw, 75px);
+  --panel-r:    16px;
+  --shot-lift:  clamp(4px, .69vw, 10px);
+}
+
+/* ============================================================ */
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;
+  background:var(--c-white);
+  color:var(--c-ink);
+  font-family:var(--f-body);
+  font-size:var(--t-body);
+  line-height:var(--lh-body);
+  font-variant-numeric:tabular-nums;
+  -webkit-font-smoothing:antialiased;
+}
+.page{max-width:var(--l-page);margin:0 auto;display:flex;flex-direction:column;gap:32px;overflow-x:clip}
+
+/* ============================================================
+   SITE BACK LINK
+   ============================================================ */
+.backbar{max-width:var(--l-hero-max);margin:0 auto;padding:24px var(--l-hero-pad) 0;width:100%}
+.backlink{
+  font-family:var(--f-mono);
+  font-size:var(--t-mono);
+  letter-spacing:var(--ls-mono);
+  text-transform:uppercase;
+  font-weight:500;
+  color:var(--c-mid);
+  text-decoration:none;
+}
+.backlink:hover{color:var(--c-ink)}
+.backlink:focus-visible{outline:2px solid var(--c-link);outline-offset:4px}
+
+/* ============================================================
+   HERO
+   ============================================================ */
+.hero{padding:clamp(40px,6.5vw,96px) 0 clamp(40px,4.44vw,64px)}
+.hero-inner{max-width:var(--l-hero-max);margin:0 auto;padding:0 var(--l-hero-pad)}
+
+.mono{
+  font-family:var(--f-mono);
+  font-size:var(--t-mono);
+  letter-spacing:var(--ls-mono);
+  line-height:var(--lh-body);
+  text-transform:uppercase;
+  font-weight:500;
+  color:var(--c-soft);
+}
+.eyebrow{margin:0 0 clamp(24px,3.06vw,44px)}
+
+h1{
+  font-family:var(--f-display);
+  font-weight:700;
+  font-size:var(--t-hero);
+  line-height:var(--lh-hero);
+  letter-spacing:var(--ls-hero);
+  color:var(--c-ink);
+  margin:0;
+  max-width:777px;
+}
+.sub{
+  font-family:var(--f-serif);
+  font-size:var(--t-sub);
+  line-height:var(--lh-sub);
+  color:var(--c-mid);
+  max-width:472px;
+  margin:clamp(16px,1.94vw,28px) 0 0;
+}
+
+.record{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  border-top:1px solid var(--c-ink);
+  margin:clamp(40px,5.56vw,80px) 0 17px;
+}
+.record > div{padding:18px 22px 22px 0;border-bottom:1px solid var(--c-rule)}
+.record dt{margin:0 0 8px}
+.record dd{
+  margin:0;
+  font-family:var(--f-display);
+  font-weight:500;
+  font-size:var(--t-record);
+  line-height:var(--lh-record);
+  color:var(--c-ink);
+}
+
+.hero-media{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  margin-top:clamp(32px,4.44vw,64px);
+}
+.hero-shot{width:100%;max-width:1150px;margin:0 auto;display:block}
+.hero-shot img{width:100%;height:auto;display:block}
+
+/* ============================================================
+   MAIN BANDS
+   ============================================================ */
+.band{
+  padding:var(--sp-top) var(--l-pad);
+  display:flex;
+  flex-direction:column;
+  gap:0;
+  align-items:flex-start;
+}
+.band > * + *         {margin-top:var(--sp-fig)}
+.band > * + .chapter  {margin-top:var(--sp-block)}
+
+/* ============================================================
+   SECTIONS
+   ============================================================ */
+.sec{display:flex;flex-direction:column;align-items:flex-start;gap:0;width:100%}
+.sec > * + *          {margin-top:var(--sp-sub)}
+.sec > .sec-num + *   {margin-top:var(--sp-head)}
+.sec-num{
+  font-family:var(--f-body);
+  font-weight:700;
+  font-size:var(--t-section);
+  line-height:var(--lh-section);
+  letter-spacing:var(--ls-mono);
+  text-transform:uppercase;
+  color:var(--c-section);
+  margin:0;
+}
+.col{
+  width:100%;
+  max-width:var(--l-col);
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+  gap:0;
+}
+.col > * + *        {margin-top:var(--sp-para)}
+.col > h2 + *       {margin-top:var(--sp-h2)}
+.col > * + .finding,
+.col > .finding + *,
+.col > * + .jobs,
+.col > .jobs + *    {margin-top:var(--sp-group)}
+.col > * + .panel,
+.col > .panel + *   {margin-top:var(--sp-fig)}
+
+h2{
+  font-family:var(--f-display);
+  font-weight:700;
+  font-size:var(--t-h2);
+  line-height:var(--lh-h2);
+  letter-spacing:var(--ls-h2);
+  color:var(--c-ink);
+  margin:0;
+  max-width:var(--m-head);
+}
+p{margin:0;max-width:var(--m-text)}
+p.wide{max-width:var(--m-text)}
+p.i{font-style:italic}
+p.lead-in{color:var(--c-mid)}
+.serif-emph{
+  font-family:var(--f-serif);
+  font-weight:600;
+  font-size:var(--t-body);
+  line-height:var(--lh-body);
+}
+
+/* the framed question at the end of 04 */
+.ask-box{
+  width:100%;
+  max-width:var(--m-block);
+  border-left:3px solid var(--c-section);
+  padding:2px 0 2px 22px;
+}
+.ask-box p{
+  font-family:var(--f-display);
+  font-weight:700;
+  font-size:clamp(1.1875rem,1.94vw,1.75rem);
+  line-height:1.28;
+  letter-spacing:var(--ls-h2);
+  max-width:none;
+}
+
+/* ============================================================
+   FINDING BLOCKS
+   ============================================================ */
+.finding{
+  width:100%;
+  max-width:var(--m-block);
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+  gap:8px;
+}
+.finding .tag{
+  font-family:var(--f-mono);
+  font-size:var(--t-finding);
+  letter-spacing:var(--ls-mono);
+  line-height:var(--lh-body);
+  text-transform:uppercase;
+  font-weight:500;
+  color:var(--c-section);
+  margin-bottom:7px;
+}
+.finding p{max-width:none}
+
+/* ============================================================
+   THREE-UP CARDS
+   ============================================================ */
+.jobs{
+  width:100%;
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:1px;
+  background:var(--c-rule);
+  border-top:1px solid var(--c-rule);
+  border-bottom:1px solid var(--c-rule);
+  margin:0;
+}
+.jobs > div{background:var(--c-card);padding:22px 22px 28px}
+.jobs h3{
+  font-family:var(--f-display);
+  font-weight:600;
+  font-size:var(--t-card-h);
+  letter-spacing:var(--ls-card);
+  line-height:var(--lh-body);
+  margin:0 0 4px;
+}
+.jobs .ask{
+  display:block;
+  font-family:var(--f-mono);
+  font-size:var(--t-mono);
+  letter-spacing:var(--ls-ask);
+  line-height:var(--lh-body);
+  color:var(--c-soft);
+  margin-bottom:12px;
+}
+.jobs p{
+  font-family:var(--f-serif);
+  font-size:var(--t-card-b);
+  line-height:var(--lh-card);
+  color:var(--c-mid);
+  max-width:none;
+}
+
+/* ============================================================
+   FIGURE PANELS
+   ============================================================ */
+.panel{
+  width:100%;
+  max-width:var(--l-shot);
+  background:var(--c-panel);
+  border-radius:var(--panel-r);
+  padding:var(--sp-panel);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:var(--sp-cap);
+}
+.panel .stage{width:100%;display:flex;justify-content:center;align-items:flex-start;gap:var(--sp-pair)}
+.panel .stage > figure{margin:0;flex:1 1 0;min-width:0;display:flex;flex-direction:column;gap:var(--sp-cap)}
+.panel figure{margin:0;width:100%;display:flex;flex-direction:column;gap:var(--sp-cap)}
+
+.shot{
+  width:100%;
+  background:var(--c-white);
+  border:1px solid var(--c-shot-b);
+  border-radius:6px;
+  overflow:hidden;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:var(--c-soft);
+  font-family:var(--f-mono);
+  font-size:var(--t-mono);
+  letter-spacing:var(--ls-mono);
+  text-transform:uppercase;
+  text-align:center;
+  padding:16px;
+  box-shadow:var(--shot-lift) var(--shot-lift) 3px rgba(0,0,0,.2);
+}
+.shot.has-img{padding:0}
+.shot img{width:100%;height:100%;object-fit:cover;display:block}
+
+/* aspect ratios — exact exported pixel dimensions */
+.ar-hero    {aspect-ratio:2432/1470}
+.ar-builder {aspect-ratio:1281/1568}
+.ar-dash    {aspect-ratio:1026/1190}
+.ar-legacy  {aspect-ratio:1742/724}
+.ar-pills   {aspect-ratio:1686/564}
+.ar-pills-b {aspect-ratio:1686/586}
+.ar-key     {aspect-ratio:2560/1176}
+.ar-break   {aspect-ratio:2624/1580}
+.ar-toggle  {aspect-ratio:1900/1307}
+.ar-final   {aspect-ratio:2560/1616}
+.ar-carry   {aspect-ratio:2560/5358}
+
+figcaption, .cap{
+  display:block;
+  width:100%;
+  font-family:var(--f-body);
+  font-size:var(--t-caption);
+  line-height:1.4;
+  color:var(--c-ink);
+  text-align:center;
+  margin-top:4px;
+}
+
+/* narrower stages for tall or small figures */
+.panel.narrow .stage{max-width:760px;margin:0 auto}
+.panel.mid .stage{max-width:920px;margin:0 auto}
+.panel.tall .stage{max-width:600px;margin:0 auto}
+
+/* ============================================================
+   PIVOT BAND
+   ============================================================ */
+.pivot{
+  background:var(--c-pivot);
+  padding:var(--l-pad);
+  display:flex;
+  flex-direction:column;
+  gap:var(--sp-para);
+}
+.pivot .stack{display:flex;flex-direction:column;gap:16px;width:100%;max-width:var(--l-col)}
+.pivot .col{gap:0}
+.pivot h2{color:var(--c-white)}
+.pivot p{color:var(--c-white)}
+.pivot .sec-num{color:var(--c-white)}
+.disconfirm{
+  width:100%;
+  margin-top:34px;
+  padding-top:28px;
+  border-top:1px solid var(--c-white);
+}
+.disconfirm p{color:var(--c-white);line-height:var(--lh-disc);max-width:none}
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+footer{
+  border-top:1px solid var(--c-ink);
+  padding:34px var(--l-pad) 64px;
+}
+.foot{
+  display:flex;flex-wrap:wrap;align-items:baseline;
+  gap:8px 28px;padding-right:32px;
+}
+.foot .name{
+  font-family:var(--f-display);font-weight:600;
+  font-size:var(--t-record);line-height:var(--lh-body);color:var(--c-ink);
+}
+.foot .mono{color:var(--c-mid);margin:0}
+.foot a{color:var(--c-link);text-decoration:none}
+.foot a:hover{text-decoration:underline}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width:1100px){
+  .panel.narrow .stage,.panel.mid .stage,.panel.tall .stage{max-width:100%}
+}
+@media (max-width:820px){
+  .record{grid-template-columns:1fr 1fr}
+  .jobs{grid-template-columns:1fr}
+  .panel .stage{flex-direction:column;gap:var(--sp-cards)}
+  .panel .stage > figure{width:100%}
+}
+@media (max-width:560px){
+  .record{grid-template-columns:1fr}
+}
+@media (prefers-reduced-motion:reduce){
+  *{transition:none!important;animation:none!important}
+}
+
+/* ============================================================
+   HERO ENTRANCE
+   ============================================================ */
+@keyframes heroRise{
+  from{opacity:0;transform:translate3d(0,14px,0)}
+  to  {opacity:1;transform:none}
+}
+@keyframes heroSettle{
+  from{opacity:0;transform:translate3d(0,18px,0) scale(.988)}
+  to  {opacity:1;transform:none}
+}
+@media (prefers-reduced-motion:no-preference){
+  .hero .eyebrow,
+  .hero h1,
+  .hero .sub,
+  .hero .record{
+    animation:heroRise 480ms cubic-bezier(.16,.84,.44,1) both;
+    will-change:opacity,transform;
+  }
+  .hero .eyebrow{animation-delay:0ms}
+  .hero h1      {animation-delay:60ms}
+  .hero .sub    {animation-delay:120ms}
+  .hero .record {animation-delay:180ms}
+  .hero .hero-media{
+    animation:heroSettle 620ms cubic-bezier(.16,.84,.44,1) both;
+    animation-delay:240ms;
+    will-change:opacity,transform;
+  }
+}
+
+/* ============================================================
+   CHAPTER BAR
+   ============================================================ */
+.cbar{
+  position:fixed;
+  left:0;right:0;bottom:0;
+  z-index:60;
+  background:rgba(255,255,255,.88);
+  -webkit-backdrop-filter:saturate(180%) blur(14px);
+  backdrop-filter:saturate(180%) blur(14px);
+  border-top:1px solid var(--c-rule);
+  transform:translateY(101%);
+  transition:transform 380ms cubic-bezier(.16,.84,.44,1);
+  will-change:transform;
+}
+.cbar.is-visible{transform:none}
+
+.cbar-rule{position:absolute;top:-1px;left:0;right:0;height:1px;overflow:hidden}
+.cbar-rule i{
+  display:block;height:100%;width:0%;
+  background:var(--c-section);
+  transition:width 120ms linear;
+}
+
+.cbar-inner{
+  max-width:var(--l-page);
+  margin:0 auto;
+  padding:0 var(--l-pad);
+  height:54px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:24px;
+}
+
+.cbar-now{display:flex;align-items:baseline;gap:10px;min-width:0}
+.cbar-now .n{
+  font-family:var(--f-mono);
+  font-size:var(--t-mono);
+  letter-spacing:var(--ls-mono);
+  color:var(--c-section);
+  font-weight:500;
+  flex:0 0 auto;
+}
+.cbar-now .t{
+  font-family:var(--f-display);
+  font-weight:700;
+  font-size:13px;
+  letter-spacing:-.01em;
+  color:var(--c-ink);
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+@media (prefers-reduced-motion:no-preference){
+  .cbar-now.is-swapping .n,
+  .cbar-now.is-swapping .t{animation:cbarSwap 340ms cubic-bezier(.16,.84,.44,1) both}
+  .cbar-now.is-swapping .t{animation-delay:40ms}
+}
+@keyframes cbarSwap{
+  from{opacity:0;transform:translate3d(0,7px,0)}
+  to  {opacity:1;transform:none}
+}
+
+.cbar-seg{list-style:none;margin:0;padding:0;display:flex;align-items:center;gap:6px}
+.cbar-seg a{
+  display:block;
+  width:22px;height:2px;
+  background:var(--c-rule);
+  border-radius:1px;
+  transition:background 240ms ease,transform 240ms ease;
+  position:relative;
+}
+.cbar-seg a::after{content:"";position:absolute;inset:-14px -3px}
+.cbar-seg a:hover{background:var(--c-soft)}
+.cbar-seg a:focus-visible{outline:2px solid var(--c-link);outline-offset:5px}
+.cbar-seg a.done{background:var(--c-soft)}
+.cbar-seg a.here{background:var(--c-section);transform:scaleY(2)}
+
+@media (max-width:860px){
+  .cbar-seg{display:none}
+  .cbar-inner{height:48px;justify-content:flex-start}
+}
+
+footer{padding-bottom:calc(64px + 54px)}
+
+@media print{.cbar{display:none!important}}
+</style>
+</head>
+<body>
+<!-- ============ CHAPTER BAR ============ -->
+<div class="cbar" id="cbar" aria-hidden="true">
+  <div class="cbar-rule"><i id="cbar-fill"></i></div>
+  <div class="cbar-inner">
+    <p class="cbar-now" id="cbar-now">
+      <span class="n">01</span><span class="t">Framing</span>
+    </p>
+    <ol class="cbar-seg" id="cbar-seg">
+      <li><a href="#s01" aria-label="01. Framing"></a></li>
+      <li><a href="#s02" aria-label="02. Background"></a></li>
+      <li><a href="#s03" aria-label="03. Starting point"></a></li>
+      <li><a href="#s04" aria-label="04. Problem"></a></li>
+      <li><a href="#s05" aria-label="05. Challenge"></a></li>
+      <li><a href="#s06" aria-label="06. Markers"></a></li>
+      <li><a href="#s07" aria-label="07. Chart range"></a></li>
+      <li><a href="#s08" aria-label="08. Solution"></a></li>
+      <li><a href="#s09" aria-label="09. Rationale"></a></li>
+      <li><a href="#s10" aria-label="10. Thoughts"></a></li>
+    </ol>
+  </div>
+</div>
+
+<div class="page">
+
+<div class="backbar"><a class="backlink" href="../">&lsaquo;&nbsp; All work</a></div>
+
+<!-- ======================= HERO ======================= -->
+<header class="hero">
+  <div class="hero-inner">
+    <p class="mono eyebrow">Vertafore&nbsp; ·&nbsp; RiskMatch</p>
+
+    <h1>Making Room for the Middle</h1>
+    <p class="sub">Redesigning the benchmarking range chart at RiskMatch.</p>
+
+    <dl class="record">
+      <div><dt class="mono">Role</dt><dd>Lead UX Designer<br>Report and chart system</dd></div>
+      <div><dt class="mono">Timeline</dt><dd>1 year</dd></div>
+      <div><dt class="mono">Team</dt><dd>Product · Engineering<br>Research</dd></div>
+      <div><dt class="mono">Surface</dt><dd>Benefits Benchmarking<br>Desktop primary</dd></div>
+    </dl>
+
+    <div class="hero-media">
+      <div class="hero-shot">
+        <img src="images/01-hero.png" width="2432" height="1470"
+             alt="The redesigned Benefits Benchmarking report: rows of range charts with a market median pill and a client marker on each bar.">
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ======================= BAND ONE ======================= -->
+<main class="band">
+
+  <!-- ---------- 01 FRAMING ---------- -->
+  <section class="sec chapter" id="s01">
+    <p class="sec-num">01. Framing</p>
+    <div class="col">
+      <h2>The information clients act on is in the middle, but the scale is set by the edges</h2>
+      <p>A benchmarking report answers a client's question: where do we stand in the market, and what are the openings for a different direction.</p>
+      <p>The chart made it difficult to see where the valuable metrics were. The client needed to see their value against their competition without losing the context of the full picture.</p>
+      <p class="serif-emph">This is a case study about getting the middle of a distribution back without giving up the full range.</p>
+    </div>
+  </section>
+
+  <!-- ---------- 02 BACKGROUND ---------- -->
+  <section class="sec chapter" id="s02">
+    <p class="sec-num">02. Background</p>
+    <div class="col">
+      <h2>What RiskMatch was</h2>
+      <p>RiskMatch was Vertafore's insurance data analytics platform. Its Benefits Benchmarking Report let an employee benefits broker assemble a peer cohort from a universe of roughly 94,000 plans. Client employers compared against that cohort across deductibles, copays, contribution splits, and rate structures.</p>
+      <p>Brokers built these reports for renewal conversations. The broker configures the cohort; the employer sits across the table and reads the output.</p>
+      <p>I led design on the report across the criteria builder, the report sections, and the comparison charts inside them. This case study is about one chart, which appeared in every section of every report the product produced.</p>
+    </div>
+  </section>
+
+  <div class="panel">
+    <div class="stage">
+      <figure>
+        <div class="shot ar-dash has-img">
+          <img src="images/03-criteria-dashboard.png" width="1026" height="1190" loading="lazy"
+               alt="The criteria builder before filters are applied, showing the size of the RiskMatch data universe for the current selection.">
+        </div>
+      </figure>
+      <figure>
+        <div class="shot ar-builder has-img">
+          <img src="images/02-criteria-builder.png" width="1281" height="1568" loading="lazy"
+               alt="The same builder with a client, product, industry and category filters applied, narrowing the peer cohort.">
+        </div>
+      </figure>
+    </div>
+    <p class="cap">The criteria builder. The broker narrows the universe before any chart exists.</p>
+  </div>
+
+  <!-- ---------- 03 STARTING POINT ---------- -->
+  <section class="sec chapter" id="s03">
+    <p class="sec-num">03. Starting point</p>
+    <div class="col">
+      <h2>What the legacy chart showed</h2>
+      <p>The platform already had a range chart. It plotted a distribution as a grey bar with a shaded middle band and a single median marker, and it was used across benchmark comparisons throughout the product.</p>
+      <p>It gave a serviceable view of the market, but gaps kept clients from getting the most out of it. There was no way to see how their own plan compared inside the chart. The markers were also generic, which left room to add distinction and make the important values quicker to read.</p>
+    </div>
+  </section>
+
+  <div class="panel">
+    <figure>
+      <div class="shot ar-legacy has-img">
+        <img src="images/04-legacy-chart.png" width="1742" height="724" loading="lazy"
+             alt="The legacy range chart: a grey bar with a shaded middle band and a single median marker.">
+      </div>
+      <figcaption>The legacy range chart. One median marker, no client position.</figcaption>
+    </figure>
+  </div>
+
+  <!-- ---------- 04 PROBLEM ---------- -->
+  <section class="sec chapter" id="s04">
+    <p class="sec-num">04. Problem</p>
+    <div class="col">
+      <h2>The range shifts, and the useful part collapses</h2>
+      <p>An axis has to reach the largest value in the data. In benefits benchmarking, the largest value can be absurd. One employer somewhere in a universe of 94,000 plans carries a $22,500 individual deductible when the average is closer to $1,000. Scaled to reach it, the chart spends almost its entire width on the distance between those two numbers, and the band where realistic plans actually sit collapses into the first inch.</p>
+      <p>The obvious fix is to cut the tail off. But the tail is real data, and brokers used it. Knowing the market runs to $22,500 is part of what makes &ldquo;your client is at $329&rdquo; mean something, and it's the figure they get asked about in the room.</p>
+      <p>So the problem was never how to remove the outlier.</p>
+
+      <div class="ask-box">
+        <p>How do you make the middle of the range readable while keeping the context of the full range intact?</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ---------- 05 CHALLENGE ---------- -->
+  <section class="sec chapter" id="s05">
+    <p class="sec-num">05. Challenge</p>
+    <div class="col">
+      <h2>The two rows pull in opposite directions</h2>
+      <p>The compression showed up in two shapes, and the fix for one is the opposite of the fix for the other.</p>
+
+      <div class="finding">
+        <span class="tag">Office visit / exam</span>
+        <p>Copays run $0 to $1,250 across the universe, while the middle 50% of plans sit between $10 and $430. Scaled to reach the maximum, that band takes up the left third of the bar and everything inside it lands within a few pixels. This row needs the scale to tighten.</p>
+      </div>
+      <div class="finding">
+        <span class="tag">Emergency room</span>
+        <p>The cohort runs $92 to $1,000, and a client sitting at $1,430 falls outside the market entirely. There is no position on the bar for that value, and it's the most decision-relevant number on the row — this client pays more than any comparable plan in the cohort. This row needs the scale to stretch.</p>
+      </div>
+    </div>
+
+    <div class="col">
+      <h2>Pain points the chart needed to address</h2>
+      <p>Make the client's position clear in relation to the other indicators. A broker scans eight rows before reading any of them. Above or below the median, inside or outside the middle 50% — this needed to register at a glance.</p>
+      <p>Keep the full context intact across ranges. A wide axis shows the true extent of the market but minimizes the part anyone acts on. A narrow axis separates the markers but cuts away context the broker may be asked about in the meeting.</p>
+    </div>
+  </section>
+
+  <!-- ---------- 06 MARKERS ---------- -->
+  <section class="sec chapter" id="s06">
+    <p class="sec-num">06. Explorations: markers</p>
+    <div class="col">
+      <h2>Telling the client apart from the market</h2>
+      <p>Putting the client on the bar created a second problem: two markers in a space designed for one. I worked through three treatments.</p>
+    </div>
+  </section>
+
+  <div class="panel">
+    <figure>
+      <div class="shot ar-pills has-img">
+        <img src="images/05-pills-same-side.png" width="1686" height="564" loading="lazy"
+             alt="First treatment: the market median and the client value both as orange pills above the bar, overlapping when the values are close.">
+      </div>
+      <figcaption>Both values as orange pills on the same side. Close values collide.</figcaption>
+    </figure>
+  </div>
+
+  <section class="sec">
+    <div class="col">
+      <p><strong>Two orange pills, same side.</strong> This broke down as soon as the two values were near each other and the pills overlapped.</p>
+      <p><strong>Orange pill, opposite side.</strong> Give each marker its own lane, one above the bar and one below. The collision resolves, but two pills of equal weight still compete for attention.</p>
+    </div>
+  </section>
+
+  <div class="panel">
+    <figure>
+      <div class="shot ar-pills-b has-img">
+        <img src="images/06-pills-opposite.png" width="1686" height="586" loading="lazy"
+             alt="Second treatment: the median pill above the bar and the client pill below it, in separate lanes.">
+      </div>
+      <figcaption>Staggering the pills clears the collision but not the competition.</figcaption>
+    </figure>
+  </div>
+
+  <section class="sec">
+    <div class="col">
+      <p><strong>A black dot for the client.</strong> Less intrusive, still distinct. On a chart this dense the client needed to be findable, not dominant.</p>
+      <p>The key came out of the same pass: each element named once — lowest, 25th percentile, middle 50%, 75th percentile, highest, median, and the client's policy.</p>
+      <p>That closed the collision problem. It did nothing for the compression. Two markers you can tell apart are still two markers inside an inch of bar.</p>
+    </div>
+  </section>
+
+  <div class="panel mid">
+    <figure>
+      <div class="shot ar-key has-img">
+        <img src="images/07-black-dot-key.png" width="2560" height="1176" loading="lazy"
+             alt="Third treatment: the client shown as a small black dot on the bar, with a named key below listing every element of the chart.">
+      </div>
+      <figcaption>The client as a small dark dot, with every element named once in the key.</figcaption>
+    </figure>
+  </div>
+
+  <!-- ---------- 07 CHART RANGE ---------- -->
+  <section class="sec chapter" id="s07">
+    <p class="sec-num">07. Explorations: chart range</p>
+    <div class="col">
+      <h2>Cutting the outlier out</h2>
+      <p>The larger problem was outliers stretching the bar. That shrank the area where most of the data lived and gave width to the regions carrying the least information. I tried visual treatments that would remove the emptiest stretch of the axis.</p>
+    </div>
+  </section>
+
+  <div class="panel narrow">
+    <figure>
+      <div class="shot ar-break has-img">
+        <img src="images/08-bar-break.png" width="2624" height="1580" loading="lazy"
+             alt="Bar break explorations: the range chart with a visual break cutting out the sparse upper region of the axis.">
+      </div>
+      <figcaption>Bar break explorations.</figcaption>
+    </figure>
+  </div>
+
+  <section class="sec">
+    <div class="col">
+      <p>This did put focus back on the dense part of the distribution, but it left a visible void in the data. That created a blind spot: a broker asked about the removed region had no way to answer. The information wasn't the most important on the row, but it was still real and still had to be accounted for.</p>
+    </div>
+  </section>
+
+  <!-- ---------- 08 SOLUTION ---------- -->
+  <section class="sec chapter" id="s08">
+    <p class="sec-num">08. Solution</p>
+    <div class="col">
+      <h2>Solving it in two layers</h2>
+      <p>The mistake was trying to make one chart do both jobs. The answer was to spread the problem across two layers, so each solved only the part it was good at.</p>
+      <p><strong>The marker system does the first job.</strong> Position reads before value, and the client is findable without shouting.</p>
+      <p><strong>The toggle does the second: it lets the reader choose the question.</strong> A segmented control switches between two views of the same row.</p>
+      <p><em>Full Range</em> shows the market's true extent, so a broker can see the whole spread of what the criteria produced.</p>
+      <p><em>Middle 50%</em> rescales each row so the axis is the 25th-to-75th band. Annual Deductible &ndash; Individual goes from a $0&ndash;$22,500 axis to $250&ndash;$1,000, and the client at $329 separates cleanly from the median at $500.</p>
+      <p>Nothing is hidden by default and nothing is hidden permanently. This is the distinction the bar break couldn't make: zoom in without excluding the rest of the data.</p>
+    </div>
+  </section>
+
+  <div class="panel">
+    <div class="stage">
+      <figure>
+        <div class="shot ar-toggle has-img">
+          <img src="images/09-full-range.png" width="1900" height="1307" loading="lazy"
+               alt="Full Range view: the axis reaches the market maximum and the middle of the distribution is compressed.">
+        </div>
+        <figcaption>Full Range</figcaption>
+      </figure>
+      <figure>
+        <div class="shot ar-toggle has-img">
+          <img src="images/10-middle-50.png" width="1900" height="1307" loading="lazy"
+               alt="Middle 50% view: the axis is rescaled to the 25th-to-75th percentile band and the markers separate.">
+        </div>
+        <figcaption>Middle 50%</figcaption>
+      </figure>
+    </div>
+    <p class="cap">The same rows, two questions. One click apart.</p>
+  </div>
+
+  <!-- ---------- 09 RATIONALE ---------- -->
+  <section class="sec chapter" id="s09">
+    <p class="sec-num">09. Rationale</p>
+    <div class="col">
+      <h2>Decisions that made it hold</h2>
+      <p>The quiet client marker worked because the chart was already full — endpoints, band, median pill, axis labels. A second loud element would have turned every row into a competition. A small dark dot marks where the client's value sits without fighting the median pill for the same inch.</p>
+      <p>The toggle worked because it took nothing away. Every earlier attempt at compression removed something: the bar break removed a region, a fixed zoom would have removed the tail. The toggle removes nothing. It changes which question the axis is answering, and the other view is one click back.</p>
+    </div>
+  </section>
+
+  <div class="panel">
+    <figure>
+      <div class="shot ar-final has-img">
+        <img src="images/11-final-encoding.png" width="2560" height="1616" loading="lazy"
+             alt="Detail of the finished chart: percentile endpoints, middle 50% band, market median pill, client marker dot and the named key.">
+      </div>
+      <figcaption>The finished encoding: endpoints, band, median pill, client dot, key.</figcaption>
+    </figure>
+  </div>
+
+  <section class="sec">
+    <div class="col">
+      <p>The marker system carried across every section of the client report and the multi-category report. Contribution Costs, Rate Costs, Employee Segment Costs, and Premium Over Time all present the same information in the same encoding, so a broker learns one chart and reads all of them.</p>
+    </div>
+  </section>
+
+  <div class="panel tall">
+    <figure>
+      <div class="shot ar-carry has-img">
+        <img src="images/12-sections-carry.png" width="2560" height="5358" loading="lazy"
+             alt="The same chart pattern repeated across Contribution Costs, Rate Costs, Employee Segment Costs and Premium Over Time sections.">
+      </div>
+      <figcaption>One encoding across every section of the report.</figcaption>
+    </figure>
+  </div>
+
+  <!-- ---------- 10 THOUGHTS ---------- -->
+  <section class="sec chapter" id="s10">
+    <p class="sec-num">10. Thoughts</p>
+    <div class="col">
+      <h2>When one view has to answer two incompatible questions, adding encoding makes it worse</h2>
+      <p>Every fix I tried inside the chart — different markers, staggered labels, a break in the bar — was an attempt to fit two scales into one. Each one made the chart busier and the insight harder to pull out.</p>
+      <p>What worked was giving up on solving it in one place. The marks made position readable. The control let the reader choose which question they were asking. And setting the endpoints at the 5th and 95th percentile meant the conflict came up far less often to begin with.</p>
+    </div>
+  </section>
+
+</main>
+
+<!-- ======================= FOOTER ======================= -->
+<footer>
+  <div class="foot">
+    <span class="name">Nicholas Womack</span>
+    <span class="mono">Senior UX Designer</span>
+    <span class="mono"><a href="mailto:nicholasromone@gmail.com">nicholasromone@gmail.com</a></span>
+    <span class="mono">New York, NY</span>
+  </div>
+</footer>
+
+</div>
+
+
+<script>
+/* Chapter bar. Position-based rather than IntersectionObserver: figures
+   and unnumbered sections sit between the numbered ones, so a chapter's
+   territory runs until the next number starts, not until its own element
+   ends. Pure enhancement -- without JS the bar stays off-screen and
+   nothing else changes. */
+(function () {
+  var bar  = document.getElementById('cbar');
+  var now  = document.getElementById('cbar-now');
+  var fill = document.getElementById('cbar-fill');
+  if (!bar || !now || !fill) return;
+
+  var CHAPTERS = [
+    ['01', 'Framing'],     ['02', 'Background'],  ['03', 'Starting point'],
+    ['04', 'Problem'],     ['05', 'Challenge'],   ['06', 'Markers'],
+    ['07', 'Chart range'], ['08', 'Solution'],    ['09', 'Rationale'],
+    ['10', 'Thoughts']
+  ];
+  var segs    = Array.prototype.slice.call(document.querySelectorAll('#cbar-seg a'));
+  var targets = CHAPTERS.map(function (c) { return document.getElementById('s' + c[0]); });
+  if (targets.some(function (t) { return !t; })) return;
+
+  var numEl = now.querySelector('.n');
+  var ttlEl = now.querySelector('.t');
+  var foot  = document.querySelector('footer');
+
+  var tops = [], start = 0, end = 1, active = -1, ticking = false;
+
+  function measure() {
+    var y = window.pageYOffset;
+    tops  = targets.map(function (t) { return t.getBoundingClientRect().top + y; });
+    start = tops[0];
+    end   = foot ? foot.getBoundingClientRect().top + y : document.body.scrollHeight;
+  }
+
+  function paint(i) {
+    if (i === active) return;
+    active = i;
+    numEl.textContent = CHAPTERS[i][0];
+    ttlEl.textContent = CHAPTERS[i][1];
+    now.classList.remove('is-swapping');
+    void now.offsetWidth;              // restart the keyframe
+    now.classList.add('is-swapping');
+    segs.forEach(function (a, n) {
+      a.classList.toggle('done', n < i);
+      a.classList.toggle('here', n === i);
+    });
+  }
+
+  function update() {
+    ticking = false;
+    var y    = window.pageYOffset;
+    var line = y + window.innerHeight * 0.35;
+
+    var i = -1;
+    for (var n = 0; n < tops.length; n++) { if (tops[n] <= line) i = n; }
+
+    var footTop = foot ? foot.getBoundingClientRect().top : Infinity;
+    var show = i >= 0 && footTop > window.innerHeight - 54;
+    bar.classList.toggle('is-visible', show);
+    bar.setAttribute('aria-hidden', show ? 'false' : 'true');
+
+    if (i >= 0) paint(i);
+
+    var span = Math.max(1, end - start - window.innerHeight * 0.35);
+    var pct  = Math.min(100, Math.max(0, ((y - start) / span) * 100));
+    fill.style.width = pct.toFixed(2) + '%';
+  }
+
+  function onScroll() {
+    if (!ticking) { ticking = true; window.requestAnimationFrame(update); }
+  }
+
+  measure(); update();
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', function () { measure(); onScroll(); });
+  window.addEventListener('load',   function () { measure(); onScroll(); });
+})();
+</script>
+</body>
+</html>
