@@ -45,7 +45,7 @@
   --t-record:   clamp(.8125rem, 1.04vw, .9375rem);
   --t-card-h:   clamp(.9375rem, 1.18vw, 1.0625rem);
   --t-card-b:   clamp(.8125rem, 1.04vw, .9375rem);
-  --t-caption:  clamp(.75rem,.97vw,.875rem);
+  --t-caption:  clamp(.6875rem,.83vw,.75rem);
   --t-mono:     clamp(.625rem, .76vw, .6875rem);
   --t-embed:    .75rem;
 
@@ -392,8 +392,8 @@ figcaption, .cap{
   width:100%;
   font-family:var(--f-body);
   font-size:var(--t-caption);
-  line-height:1.4;
-  color:var(--c-ink);
+  line-height:1.45;
+  color:var(--c-mid);
   text-align:center;
   margin-top:4px;
 }
@@ -616,7 +616,7 @@ footer{padding-bottom:calc(64px + 54px)}
     <p class="mono eyebrow">Vertafore&nbsp; ·&nbsp; RiskMatch</p>
 
     <h1>Making Room for the Middle</h1>
-    <p class="sub">Redesigning the benchmarking range chart at RiskMatch.</p>
+    <p class="sub">The full picture when you need it. The focus when it counts.</p>
 
     <dl class="record">
       <div><dt class="mono">Role</dt><dd>Lead UX Designer<br>Report and chart system</dd></div>
@@ -643,7 +643,7 @@ footer{padding-bottom:calc(64px + 54px)}
     <div class="col">
       <h2>The information clients act on is in the middle, but the scale is set by the edges</h2>
       <p>A benchmarking report answers a client's question: where do we stand in the market, and what are the openings for a different direction.</p>
-      <p>The chart made it difficult to see where the valuable metrics were. The client needed to see their value against their competition without losing the context of the full picture.</p>
+      <p>The chart made it difficult to see where the valuable metrics were. In a high-stakes renewal meeting, squinting to make an approximation means the tool is not doing its job. The client also needed to see their value against their competition without losing the context of the full picture.</p>
       <p class="serif-emph">This is a case study about getting the middle of a distribution back without giving up the full range.</p>
     </div>
   </section>
@@ -720,18 +720,18 @@ footer{padding-bottom:calc(64px + 54px)}
       <p>The compression showed up in two shapes, and the fix for one is the opposite of the fix for the other.</p>
 
       <div class="finding">
-        <span class="tag">Office visit / exam</span>
-        <p>Copays run $0 to $1,250 across the universe, while the middle 50% of plans sit between $10 and $430. Scaled to reach the maximum, that band takes up the left third of the bar and everything inside it lands within a few pixels. This row needs the scale to tighten.</p>
+        <span class="tag">Needs the scale to tighten</span>
+        <p><strong>Office Visit / Exam.</strong> Copays run $0 to $1,250 across the universe, while the middle 50% of plans sit between $10 and $430. Scaled to reach the maximum, that band takes up the left third of the bar and everything inside it lands within a few pixels. This row needs the scale to tighten.</p>
       </div>
       <div class="finding">
-        <span class="tag">Emergency room</span>
-        <p>The cohort runs $92 to $1,000, and a client sitting at $1,430 falls outside the market entirely. There is no position on the bar for that value, and it's the most decision-relevant number on the row — this client pays more than any comparable plan in the cohort. This row needs the scale to stretch.</p>
+        <span class="tag">Needs the scale to stretch</span>
+        <p><strong>Emergency Room.</strong> The cohort runs $92 to $1,000, and a client sitting at $1,430 falls outside the market entirely. There is no position on the bar for that value, and it's the most decision-relevant number on the row. This means client pays more than any comparable plan in the cohort. This row needs the scale to stretch.</p>
       </div>
     </div>
 
     <div class="col">
       <h2>Pain points the chart needed to address</h2>
-      <p>Make the client's position clear in relation to the other indicators. A broker scans eight rows before reading any of them. Above or below the median, inside or outside the middle 50% — this needed to register at a glance.</p>
+      <p>Make the client's position clear in relation to the other indicators. A broker scans eight rows before reading any of them. Above or below the median, inside or outside the middle 50% are all positions that need to registered at a glance.</p>
       <p>Keep the full context intact across ranges. A wide axis shows the true extent of the market but minimizes the part anyone acts on. A narrow axis separates the markers but cuts away context the broker may be asked about in the meeting.</p>
     </div>
   </section>
@@ -775,7 +775,7 @@ footer{padding-bottom:calc(64px + 54px)}
   <section class="sec">
     <div class="col">
       <p><strong>A black dot for the client.</strong> Less intrusive, still distinct. On a chart this dense the client needed to be findable, not dominant.</p>
-      <p>The key came out of the same pass: each element named once — lowest, 25th percentile, middle 50%, 75th percentile, highest, median, and the client's policy.</p>
+      <p>The key was made up of seven elements, each named once: lowest, 25th percentile, middle 50%, 75th percentile, highest, median, and the client's policy.</p>
       <p>That closed the collision problem. It did nothing for the compression. Two markers you can tell apart are still two markers inside an inch of bar.</p>
     </div>
   </section>
@@ -819,13 +819,14 @@ footer{padding-bottom:calc(64px + 54px)}
   <section class="sec chapter" id="s08">
     <p class="sec-num">08. Solution</p>
     <div class="col">
-      <h2>Solving it in two layers</h2>
-      <p>The mistake was trying to make one chart do both jobs. The answer was to spread the problem across two layers, so each solved only the part it was good at.</p>
+      <h2>Solving it in three layers</h2>
+      <p>The mistake was trying to make one chart do both jobs. Forcing a single static view was fundamentally flawed for brokers who switch between macro market context and micro client comparisons. The answer was to spread the problem across three layers, so each solved only the part it was good at.</p>
       <p><strong>The marker system does the first job.</strong> Position reads before value, and the client is findable without shouting.</p>
-      <p><strong>The toggle does the second: it lets the reader choose the question.</strong> A segmented control switches between two views of the same row.</p>
+      <p><strong>The toggle does the second: it lets the reader choose the question.</strong> It changes the mental model. Instead of a single cramped view, a segmented control moves between two views of the same row in the same context.</p>
       <p><em>Full Range</em> shows the market's true extent, so a broker can see the whole spread of what the criteria produced.</p>
       <p><em>Middle 50%</em> rescales each row so the axis is the 25th-to-75th band. Annual Deductible &ndash; Individual goes from a $0&ndash;$22,500 axis to $250&ndash;$1,000, and the client at $329 separates cleanly from the median at $500.</p>
       <p>Nothing is hidden by default and nothing is hidden permanently. This is the distinction the bar break couldn't make: zoom in without excluding the rest of the data.</p>
+      <p><strong>The third layer was the endpoints.</strong> Changing the lowest and highest markers to the 5th and 95th percentile kept extreme outliers on the tail from breaking the chart in the first place.</p>
     </div>
   </section>
 
@@ -854,8 +855,9 @@ footer{padding-bottom:calc(64px + 54px)}
     <p class="sec-num">09. Rationale</p>
     <div class="col">
       <h2>Decisions that made it hold</h2>
-      <p>The quiet client marker worked because the chart was already full — endpoints, band, median pill, axis labels. A second loud element would have turned every row into a competition. A small dark dot marks where the client's value sits without fighting the median pill for the same inch.</p>
+      <p>The quiet client marker worked because the chart was already full. A second loud element would have turned every row into a competition. Making the client marker small meant the thing you read was the gap between it and the median, rather than two markers competing. The key let a reader register each symbol at a glance.</p>
       <p>The toggle worked because it took nothing away. Every earlier attempt at compression removed something: the bar break removed a region, a fixed zoom would have removed the tail. The toggle removes nothing. It changes which question the axis is answering, and the other view is one click back.</p>
+      <p>Moving the endpoints to the 5th and 95th percentile was a compromise, the true minimum and maximum are no longer on the bar, but it let one chart stay functional across very different data sets.</p>
     </div>
   </section>
 
@@ -890,8 +892,8 @@ footer{padding-bottom:calc(64px + 54px)}
     <p class="sec-num">10. Thoughts</p>
     <div class="col">
       <h2>When one view has to answer two incompatible questions, adding encoding makes it worse</h2>
-      <p>Every fix I tried inside the chart — different markers, staggered labels, a break in the bar — was an attempt to fit two scales into one. Each one made the chart busier and the insight harder to pull out.</p>
-      <p>What worked was giving up on solving it in one place. The marks made position readable. The control let the reader choose which question they were asking. And setting the endpoints at the 5th and 95th percentile meant the conflict came up far less often to begin with.</p>
+      <p>Every fix I tried inside the chart, different markers, staggered labels, a break in the bar, was an attempt to fit two scales into one. Each one made the chart busier and the insight harder to pull out.</p>
+      <p>What worked was giving up on solving it in one place. The marks made position readable. The control let the reader choose which question they were asking.</p>
     </div>
   </section>
 
