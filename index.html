@@ -3,164 +3,136 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Nicholas Womack — Senior Product Designer</title>
-<meta name="description" content="Nicholas Womack, Senior Product Designer. Selected work from JPMorgan Chase and Vertafore.">
+<title>Nicholas Womack | Senior Product Designer &amp; UX Strategist</title>
+<meta name="description" content="Nicholas Womack, Senior Product Designer and UX Strategist in New York. Selected work from JPMorgan Chase, Vertafore and Stationhead.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,400;0,500;0,600;1,300;1,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@0,62..125,300..800;1,62..125,300..500&display=swap" rel="stylesheet">
 <style>
 :root{
-  --c-ink:      #000000;
-  --c-label:    #9E9E9E;
-  --c-white:    #FFFFFF;
-  --c-link:     #12459B;
-
-  --f: 'Archivo', system-ui, sans-serif;
-
-  --t-name:  clamp(1.375rem, 1.94vw, 1.875rem);   /* 30px */
-  --t-role:  clamp(1.0625rem, 1.55vw, 1.5rem);    /* 24px */
-  --t-state: clamp(2rem, 3.61vw, 3.5rem);         /* 56px */
-  --t-label: clamp(.75rem, 1.03vw, 1rem);         /* 16px */
-  --t-title: clamp(1.125rem, 1.55vw, 1.5rem);     /* 24px */
-
-  --l-max:   1240px;
-  --l-pad:   clamp(20px, 6.45vw, 100px);
-
-  --card-r:  32px;
-  --card-px: clamp(14px, 1.68vw, 26px);
-  --card-py: clamp(26px, 3.61vw, 56px);
-  --gap-row: clamp(32px, 7.1vw, 110px);
-  --gap-sec: clamp(32px, 3.03vw, 47px);
+  --ink:#0E1419;
+  --body:#39434C;
+  --muted:#5A6672;
+  --blue:#1F4FD8;
+  --focus:#0B6E63;
+  --f:'Archivo', system-ui, sans-serif;
+  --pad:clamp(20px, 6.5vw, 100px);
+  --max:1240px;
+  --ease:cubic-bezier(.16,.84,.44,1);
 }
 *{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%}
 body{
   margin:0;
-  min-height:100vh;
+  background:#FFFFFF;
+  color:var(--ink);
   font-family:var(--f);
-  color:var(--c-ink);
   -webkit-font-smoothing:antialiased;
   text-rendering:optimizeLegibility;
-
-  /* fallback for browsers without oklab gradient support */
-  background:
-    radial-gradient(ellipse 56.5% 53.7% at 50% 42%,
-      rgb(33,253,225) 0%, rgb(212,254,248) 15.47%, #FFFFFF 100%)
-    no-repeat #FFFFFF;
 }
-@supports (background: radial-gradient(ellipse at 50% 50% in oklab, red, blue)){
-  body{
-    background:
-      radial-gradient(ellipse 56.495% 53.665% at 50% 42% in oklab,
-        oklab(89.2% -0.157 -0.003) 0%, 15.47%, oklab(100% 0 0) 100%)
-      no-repeat #FFFFFF;
-  }
-}
+a{color:var(--ink)}
+a:hover{color:var(--focus)}
+.wrap{max-width:var(--max);margin:0 auto}
 
-.page{
-  max-width:var(--l-max);
-  margin:0 auto;
-  padding:clamp(24px,3vw,40px) var(--l-pad) clamp(48px,5vw,72px);
-  display:flex;
-  flex-direction:column;
-  align-items:flex-start;
-  gap:var(--gap-sec);
+/* ---------- hero ---------- */
+.hero{padding:40px var(--pad) clamp(96px, 11vw, 168px)}
+.hero .wrap{display:flex;flex-direction:column;gap:clamp(72px, 9vw, 136px)}
+.topline{
+  margin:0;display:flex;flex-wrap:wrap;gap:6px 14px;
+  font-weight:500;font-size:14px;letter-spacing:.14em;color:var(--muted);
 }
+.topline .caps{text-transform:uppercase}
+.topline a{letter-spacing:.02em;text-decoration:none;border-bottom:1px solid rgba(14,20,25,.3)}
+.topline a:hover{border-bottom-color:currentColor}
 
-/* ---------- masthead ---------- */
-.masthead{
-  display:flex;
-  align-items:baseline;
-  flex-wrap:wrap;
-  gap:0 .6em;
-  min-height:clamp(48px,5.8vw,84px);
-  padding-top:clamp(8px,1.1vw,16px);
+.hero-row{
+  display:grid;
+  grid-template-columns:minmax(0,7fr) minmax(0,5fr); /* right column reserved for a future illustration */
+  gap:clamp(24px, 4vw, 64px);
+  align-items:center;
 }
-.masthead .name{font-weight:600;font-size:var(--t-name);line-height:1.2;letter-spacing:-.012em;margin:0}
-.masthead .role{font-weight:400;font-size:var(--t-role);line-height:1.25;margin:0}
-.masthead .sep{font-weight:400;font-size:var(--t-role);color:var(--c-ink);opacity:.5}
-
-/* ---------- statement ---------- */
-.statement{margin:0;font-size:var(--t-state);line-height:1.14;letter-spacing:-.022em;max-width:20ch}
-.statement .a{font-weight:400;display:block}
-.statement .b{font-weight:300;font-style:italic;display:block}
+.hello{margin:0;font-weight:500;font-size:clamp(22px, 2vw, 28px);letter-spacing:-.01em;color:var(--body)}
+.hero h1{
+  margin:20px 0 0;max-width:16ch;min-height:2em;
+  font-weight:700;font-stretch:82%;
+  font-size:clamp(48px, 6.4vw, 92px);line-height:1;letter-spacing:-.03em;
+  color:var(--blue);
+}
+.caret{
+  display:inline-block;width:.06em;height:.9em;margin-left:.06em;
+  background:var(--blue);vertical-align:-.08em;
+  animation:blink 1s steps(1) infinite;
+}
+@keyframes blink{50%{opacity:0}}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
 
 /* ---------- work ---------- */
-.grid{
-  width:100%;
+.work{padding:0 var(--pad) clamp(96px, 10vw, 160px)}
+.work .wrap{display:flex;flex-direction:column;gap:clamp(96px, 11vw, 180px)}
+
+.proj{
   display:grid;
-  grid-template-columns:repeat(2,1fr);
-  gap:var(--gap-row);
-  margin-top:clamp(16px,2.5vw,36px);
-}
-.card{
-  display:flex;
-  flex-direction:column;
-  gap:24px;
-  text-decoration:none;
-  color:inherit;
-}
-.card:focus-visible{outline:2px solid var(--c-link);outline-offset:10px;border-radius:var(--card-r)}
-
-
-.frame{
-  background:var(--c-white);
-  border-radius:var(--card-r);
-  padding:var(--card-py) var(--card-px);
-  display:flex;
+  grid-template-columns:minmax(0,5fr) minmax(0,7fr);
+  gap:clamp(40px, 5vw, 88px);
   align-items:center;
-  justify-content:center;
-  overflow:hidden;
+  text-decoration:none;
+  color:var(--ink);
 }
-/* one shared slot so both thumbnails read at the same size */
-.frame img{
-  width:100%;
-  height:auto;
-  aspect-ratio:2432/1469;
-  object-fit:contain;
-  display:block;
-  transition:transform 420ms cubic-bezier(.16,.84,.44,1);
-}
-@media (prefers-reduced-motion:no-preference){
-  .card:hover .frame img,
-  .card:focus-visible .frame img{transform:scale(1.035)}
-}
+.proj:hover{color:var(--ink)}
+.proj:focus-visible{outline:2px solid var(--focus);outline-offset:12px;border-radius:12px}
 
-.meta{display:flex;flex-direction:column;gap:8px;max-width:36ch}
-.meta .client{
-  margin:0;
-  font-weight:500;
-  font-size:var(--t-label);
-  line-height:1.25;
-  letter-spacing:.01em;
-  text-transform:uppercase;
-  color:var(--c-label);
-}
-.meta .title{
-  margin:0;
-  font-weight:600;
-  letter-spacing:-.01em;
-  font-size:var(--t-title);
-  line-height:1.25;
-}
-.card:hover .title{text-decoration:underline;text-underline-offset:5px}
+.txt{display:flex;flex-direction:column;gap:18px}
+.client{margin:0;font-weight:500;font-size:14px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.txt h2{margin:0;font-weight:700;font-stretch:85%;font-size:clamp(30px, 3vw, 44px);line-height:1.08;letter-spacing:-.02em}
+.desc{margin:4px 0 0;font-size:18px;line-height:1.6;color:var(--body)}
+.more{align-self:flex-start;margin-top:8px;font-weight:600;font-size:17px;border-bottom:1px solid transparent;transition:border-color .3s ease}
+.arrow{display:inline-block;transition:transform .3s ease}
+.proj:hover .more,.proj:focus-visible .more{border-bottom-color:currentColor}
+.proj:hover .arrow,.proj:focus-visible .arrow{transform:translateX(6px)}
 
-/* ---------- contact ---------- */
-.contact{
-  display:flex;
-  flex-wrap:wrap;
-  gap:6px 24px;
-  margin-top:clamp(24px,3vw,44px);
-  font-weight:400;
-  font-size:var(--t-label);
-  color:var(--c-ink);
-}
-.contact a{color:var(--c-ink);text-decoration:none;border-bottom:1px solid rgba(0,0,0,.25)}
-.contact a:hover{border-bottom-color:currentColor}
+.ease{transition:transform .7s var(--ease),box-shadow .7s var(--ease),object-position 2.4s cubic-bezier(.45,0,.2,1)}
 
+/* Chase: MacBook rises and grows */
+.img-mac{position:relative;display:flex;justify-content:center;padding-bottom:28px}
+.mac{position:relative;z-index:1;display:block;width:100%;height:auto;aspect-ratio:2432/1469}
+.mac-shadow{
+  position:absolute;bottom:8px;left:10%;width:80%;height:32px;border-radius:50%;
+  background:radial-gradient(ellipse at center, rgba(14,20,25,.22) 0%, rgba(14,20,25,0) 70%);
+  transition:transform .7s var(--ease),opacity .7s ease;
+}
+.p-chase:hover .mac,.p-chase:focus-visible .mac{transform:translateY(-14px) scale(1.04)}
+.p-chase:hover .mac-shadow,.p-chase:focus-visible .mac-shadow{transform:scaleX(.86);opacity:.55}
+
+/* RiskMatch: browser window lifts, report scrolls inside */
+.img-win{display:flex;justify-content:center;padding:12px 0 28px}
+.win{
+  width:100%;border-radius:14px;overflow:hidden;background:#FFFFFF;
+  box-shadow:0 40px 80px -40px rgba(14,20,25,.3),0 0 0 1px rgba(14,20,25,.08);
+}
+.win-bar{height:34px;background:#F2F3F5;border-bottom:1px solid #E3E6EA;display:flex;align-items:center;gap:7px;padding:0 14px}
+.win-bar .dot{width:11px;height:11px;border-radius:50%}
+.win-bar .url{flex:1;max-width:300px;height:20px;margin:0 auto;border-radius:6px;background:#FFFFFF;border:1px solid #E3E6EA}
+.win-shot{display:block;width:100%;height:auto;aspect-ratio:1867/1250}
+.p-risk:hover .win,.p-risk:focus-visible .win{transform:translateY(-12px) scale(1.025);box-shadow:0 60px 90px -40px rgba(14,20,25,.35),0 0 0 1px rgba(14,20,25,.08)}
+
+/* Stationhead: phones fan out */
+.img-phones{display:flex;justify-content:center;align-items:flex-start;padding:16px 0 56px}
+.phone{padding:5px;background:#0E0B0C;box-shadow:0 30px 50px -24px rgba(14,20,25,.45)}
+.phone img{display:block;width:100%;aspect-ratio:600/1067;object-fit:cover}
+.ph-l,.ph-r{width:clamp(100px, 12vw, 180px);border-radius:24px}
+.ph-l img,.ph-r img{border-radius:19px}
+.ph-l{transform:rotate(-8deg) translateY(28px);margin-right:-26px}
+.ph-r{transform:rotate(8deg) translateY(28px);margin-left:-26px}
+.ph-c{position:relative;z-index:2;width:clamp(112px, 13.5vw, 200px);border-radius:26px}
+.ph-c img{border-radius:21px}
+.p-sh:hover .ph-l,.p-sh:focus-visible .ph-l{transform:rotate(-14deg) translate(-26px,24px) scale(1.03)}
+.p-sh:hover .ph-c,.p-sh:focus-visible .ph-c{transform:translateY(-22px) scale(1.06)}
+.p-sh:hover .ph-r,.p-sh:focus-visible .ph-r{transform:rotate(14deg) translate(26px,24px) scale(1.03)}
+
+/* ---------- responsive ---------- */
 @media (max-width:820px){
-  .grid{grid-template-columns:1fr;gap:clamp(36px,7vw,56px)}
-  .statement{max-width:none}
+  .hero-row,.proj{grid-template-columns:minmax(0,1fr)}
+  .proj .img{order:-1}
 }
 @media (prefers-reduced-motion:reduce){
   *{transition:none!important;animation:none!important}
@@ -168,50 +140,103 @@ body{
 </style>
 </head>
 <body>
-<div class="page">
 
-  <header class="masthead">
-    <p class="name">Nicholas Womack</p>
-    <span class="sep">·</span>
-    <p class="role">Senior Product Designer</p>
-  </header>
+<header class="hero">
+  <div class="wrap">
+    <p class="topline">
+      <span class="caps">Senior Product Designer &amp; UX Strategist</span>
+      <span aria-hidden="true">·</span>
+      <span class="caps">New York</span>
+      <span aria-hidden="true">·</span>
+      <a href="mailto:nicholasromone@gmail.com">nicholasromone@gmail.com</a>
+    </p>
 
-  <h1 class="statement">
-    <span class="a">Designing scalable ecosystems.</span>
-    <span class="b">Delivering clean user experiences.</span>
-  </h1>
-
-  <main class="grid">
-
-    <a class="card" href="chase/">
-      <div class="frame">
-        <img src="images/thumb-chase.png" width="2432" height="1469"
-             alt="Sales Activity: a chronological table of card sales, refunds and disputes.">
+    <div class="hero-row">
+      <div>
+        <p class="hello">Hi, I'm Nick.</p>
+        <h1>
+          <span class="sr-only">Systems thinking, so the user never has to.</span>
+          <span id="typed" aria-hidden="true">Systems thinking, so the user never has to.</span><span class="caret" aria-hidden="true"></span>
+        </h1>
       </div>
-      <div class="meta">
-        <p class="client">JP Morgan Chase &middot; Payment Solutions</p>
-        <p class="title">Redesigning Sales Activity</p>
+      <div aria-hidden="true"><!-- reserved for a future illustration --></div>
+    </div>
+  </div>
+</header>
+
+<main class="work">
+  <div class="wrap">
+
+    <!-- 1 · Chase -->
+    <a class="proj p-chase" href="chase/">
+      <div class="txt">
+        <p class="client">JPMorgan Chase · Payment Solutions</p>
+        <h2>Redesigning Sales Activity</h2>
+        <p class="desc">How research stopped us from building the wrong thing. User-testing showed merchants think in single transactions, instead of the grouped orders the backend was built around.</p>
+        <span class="more">View case study <span class="arrow">→</span></span>
+      </div>
+      <div class="img img-mac">
+        <img class="mac ease" src="images/thumb-chase.png" width="2432" height="1469"
+             alt="Sales Activity on a MacBook: a chronological table of card sales, refunds and disputes.">
+        <div class="mac-shadow" aria-hidden="true"></div>
       </div>
     </a>
 
-    <a class="card" href="riskmatch/">
-      <div class="frame">
-        <img src="images/thumb-riskmatch.png" width="2432" height="1469"
-             alt="The Benefits Benchmarking report: rows of range charts with a median pill and a client marker.">
+    <!-- 2 · RiskMatch -->
+    <a class="proj p-risk" href="riskmatch/">
+      <div class="txt">
+        <p class="client">Vertafore · RiskMatch</p>
+        <h2>Making Room for the Middle</h2>
+        <p class="desc">Cleaning up a crowded benchmarking chart so brokers could see where their client stood at a glance.</p>
+        <span class="more">View case study <span class="arrow">→</span></span>
       </div>
-      <div class="meta">
-        <p class="client">Vertafore &middot; RiskMatch</p>
-        <p class="title">Making Room for the Middle</p>
+      <div class="img img-win">
+        <div class="win ease">
+          <div class="win-bar" aria-hidden="true">
+            <span class="dot" style="background:#FF5F57"></span>
+            <span class="dot" style="background:#FEBC2E"></span>
+            <span class="dot" style="background:#28C840"></span>
+            <span class="url"></span>
+          </div>
+          <img class="win-shot ease" src="images/riskmatch-screen.png" width="1867" height="1250" loading="lazy"
+               alt="Benefits Benchmarking report: range charts with a median pill, an aggregate tooltip and a data table.">
+        </div>
       </div>
     </a>
 
-  </main>
+    <!-- 3 · Stationhead -->
+    <a class="proj p-sh" href="stationhead/">
+      <div class="txt">
+        <p class="client">Stationhead · Live audio</p>
+        <h2>Turning listeners into broadcasters</h2>
+        <p class="desc">Making a new kind of radio easy to understand, from first launch to first live show.</p>
+        <span class="more">View case study <span class="arrow">→</span></span>
+      </div>
+      <div class="img img-phones">
+        <div class="phone ph-l ease"><img src="stationhead/images/intro1.jpg" loading="lazy" alt="Stationhead intro card: become a broadcaster and host your own shows."></div>
+        <div class="phone ph-c ease"><img src="stationhead/images/my_station_on_mid.jpg" loading="lazy" alt="Live broadcast screen with the ON indicator and three-mode control bar."></div>
+        <div class="phone ph-r ease"><img src="stationhead/images/goingonair.jpg" loading="lazy" alt="Going on air screen with caption and share toggles."></div>
+      </div>
+    </a>
 
-  <p class="contact">
-    <a href="mailto:nicholasromone@gmail.com">nicholasromone@gmail.com</a>
-    <span>New York, NY</span>
-  </p>
+  </div>
+</main>
 
-</div>
+<script>
+/* Types the headline in. The full text is in the markup, so without JS
+   (or with reduced motion) it simply shows complete. */
+(function () {
+  var el = document.getElementById('typed');
+  if (!el) return;
+  if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var full = el.textContent, n = 0, speed = 55;
+  el.textContent = '';
+  setTimeout(function tick() {
+    n++;
+    el.textContent = full.slice(0, n);
+    if (n < full.length) setTimeout(tick, speed);
+  }, 500);
+})();
+</script>
 </body>
 </html>

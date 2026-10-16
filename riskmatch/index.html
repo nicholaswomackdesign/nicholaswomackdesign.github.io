@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Making Room for the Middle — Nicholas Womack</title>
+<title>Making Room for the Middle | Nicholas Womack</title>
 <meta name="description" content="Redesigning the benchmarking range chart at RiskMatch. Vertafore case study by Nicholas Womack.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -27,7 +27,8 @@
   --c-shot-a:     #B9B9B9;
   --c-shot-b:     #CFCFCF;
   --c-white:      #FFFFFF;
-  --c-panel:      #DAEAF2;   /* figure panel fill */
+  --c-panel:      #DAEAF2;   /* legacy panel fill, unused */
+  --c-band:       #EDF1F5;   /* full-bleed figure band */
 
   /* ---------- FAMILIES ---------- */
   --f-display: 'Archivo', system-ui, sans-serif;
@@ -38,8 +39,8 @@
   /* ---------- TYPE ---------- */
   --t-hero:     clamp(2.75rem, 5.67vw, 5.1rem);
   --t-sub:      clamp(1.125rem, 1.67vw, 1.5rem);
-  --t-section:  clamp(1.75rem, 3.33vw, 3rem);
-  --t-h2:       clamp(1.5rem, 2.78vw, 2.5rem);
+  --t-section:  clamp(1rem, 1.39vw, 1.25rem);        /* 20 — label sits under the h2 */
+  --t-h2:       clamp(1.625rem, 3.06vw, 2.75rem);    /* 44 */
   --t-body:     clamp(1rem, 1.389vw, 1.25rem);
   --t-finding:  clamp(.8125rem, 1.11vw, 1rem);
   --t-record:   clamp(.8125rem, 1.04vw, .9375rem);
@@ -78,7 +79,7 @@
   /* ---------- SPACING ---------- */
   --sp-block:   clamp(64px, 7.60vw, 110px);
   --sp-top:     clamp(32px, 2.22vw, 32px);
-  --sp-head:    clamp(6px, .56vw, 8px);
+  --sp-head:    clamp(12px, 1.11vw, 16px);
   --sp-sub:     clamp(36px, 4.44vw, 64px);
   --sp-fig:     clamp(40px, 4.03vw, 58px);
   --sp-para:    clamp(16px, 1.53vw, 22px);
@@ -110,7 +111,8 @@ body{
   font-variant-numeric:tabular-nums;
   -webkit-font-smoothing:antialiased;
 }
-.page{max-width:var(--l-page);margin:0 auto;display:flex;flex-direction:column;gap:32px;overflow-x:clip}
+html,body{overflow-x:clip}
+.page{max-width:var(--l-page);margin:0 auto;display:flex;flex-direction:column;gap:32px}
 
 /* ============================================================
    SITE BACK LINK
@@ -143,7 +145,26 @@ body{
   font-weight:500;
   color:var(--c-soft);
 }
-.eyebrow{margin:0 0 clamp(24px,3.06vw,44px)}
+.eyebrow{margin:0 0 clamp(20px,2.22vw,32px)}
+
+/* hero top: title on the left, project record in its own card on the right */
+.hero-top{
+  background:#F6F8FA;
+  border-radius:28px;
+  padding:clamp(32px,5vw,72px);
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  gap:clamp(32px,4.44vw,64px);
+}
+.hero-text{flex:999 1 480px;min-width:0}
+.hero .eyebrow{
+  font-family:var(--f-display);
+  font-weight:700;
+  font-size:clamp(.8125rem,1.04vw,.9375rem);
+  letter-spacing:.16em;
+  color:var(--c-section);
+}
 
 h1{
   font-family:var(--f-display);
@@ -165,19 +186,34 @@ h1{
 }
 
 .record{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  border-top:1px solid var(--c-ink);
-  margin:clamp(40px,5.56vw,80px) 0 17px;
+  flex:1 1 320px;
+  max-width:420px;
+  margin:0;
+  padding:clamp(28px,2.78vw,40px);
+  background:var(--c-white);
+  border:1px solid #E3E8ED;
+  border-radius:24px;
+  box-shadow:0 1px 2px rgba(14,20,25,.04),0 16px 40px rgba(14,20,25,.06);
+  display:flex;
+  flex-direction:column;
+  gap:22px;
 }
-.record > div{padding:18px 22px 22px 0;border-bottom:1px solid var(--c-rule)}
-.record dt{margin:0 0 8px}
-.record dd{
+.record > div{display:grid;grid-template-columns:104px minmax(0,1fr);gap:16px;align-items:baseline}
+.record dt{
   margin:0;
   font-family:var(--f-display);
-  font-weight:500;
-  font-size:var(--t-record);
-  line-height:var(--lh-record);
+  font-weight:700;
+  font-size:12px;
+  letter-spacing:.16em;
+  line-height:1.4;
+  text-transform:uppercase;
+  color:var(--c-section);
+}
+.record dd{
+  margin:0;
+  font-family:var(--f-body);
+  font-size:clamp(.9375rem,1.11vw,1rem);
+  line-height:1.45;
   color:var(--c-ink);
 }
 
@@ -210,11 +246,11 @@ h1{
 .sec > * + *          {margin-top:var(--sp-sub)}
 .sec > .sec-num + *   {margin-top:var(--sp-head)}
 .sec-num{
-  font-family:var(--f-body);
+  font-family:var(--f-display);
   font-weight:700;
   font-size:var(--t-section);
   line-height:var(--lh-section);
-  letter-spacing:var(--ls-mono);
+  letter-spacing:.14em;
   text-transform:uppercase;
   color:var(--c-section);
   margin:0;
@@ -261,15 +297,13 @@ p.lead-in{color:var(--c-mid)}
 .ask-box{
   width:100%;
   max-width:var(--m-block);
-  border-left:3px solid var(--c-section);
-  padding:2px 0 2px 22px;
 }
 .ask-box p{
-  font-family:var(--f-display);
-  font-weight:700;
-  font-size:clamp(1.1875rem,1.94vw,1.75rem);
-  line-height:1.28;
-  letter-spacing:var(--ls-h2);
+  font-family:var(--f-serif);
+  font-style:italic;
+  font-weight:400;
+  font-size:clamp(1.1875rem,1.94vw,1.625rem);
+  line-height:1.4;
   max-width:none;
 }
 
@@ -297,58 +331,58 @@ p.lead-in{color:var(--c-mid)}
 .finding p{max-width:none}
 
 /* ============================================================
-   THREE-UP CARDS
+   JOBS — definition list (term left, question + answer right)
+   Same as the Sales Activity page; not used on this page yet.
    ============================================================ */
 .jobs{
   width:100%;
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:1px;
-  background:var(--c-rule);
-  border-top:1px solid var(--c-rule);
-  border-bottom:1px solid var(--c-rule);
+  max-width:var(--m-block);
   margin:0;
+  display:flex;
+  flex-direction:column;
+  gap:18px;
 }
-.jobs > div{background:var(--c-card);padding:22px 22px 28px}
-.jobs h3{
+.jobs > div{display:flex;flex-wrap:wrap;align-items:baseline;gap:2px 24px}
+.jobs dt{
+  flex:0 0 140px;
   font-family:var(--f-display);
-  font-weight:600;
-  font-size:var(--t-card-h);
+  font-weight:700;
+  font-size:clamp(1.125rem,1.53vw,1.375rem);
   letter-spacing:var(--ls-card);
-  line-height:var(--lh-body);
-  margin:0 0 4px;
+  line-height:1.4;
+}
+.jobs dd{
+  margin:0;
+  flex:1 1 320px;
+  min-width:0;
+  font-size:var(--t-body);
+  line-height:1.6;
 }
 .jobs .ask{
-  display:block;
-  font-family:var(--f-mono);
-  font-size:var(--t-mono);
-  letter-spacing:var(--ls-ask);
-  line-height:var(--lh-body);
-  color:var(--c-soft);
-  margin-bottom:12px;
-}
-.jobs p{
   font-family:var(--f-serif);
-  font-size:var(--t-card-b);
-  line-height:var(--lh-card);
+  font-style:italic;
   color:var(--c-mid);
-  max-width:none;
 }
 
 /* ============================================================
    FIGURE PANELS
+   Full-bleed band; each screenshot sits in a browser window.
    ============================================================ */
 .panel{
-  width:100%;
-  max-width:var(--l-shot);
-  background:var(--c-panel);
-  border-radius:var(--panel-r);
-  padding:var(--sp-panel);
+  width:100vw;
+  max-width:none;
+  margin-left:calc(50% - 50vw);
+  margin-right:calc(50% - 50vw);
+  background:var(--c-band);
+  border-radius:0;
+  padding:clamp(40px,5vw,72px) var(--l-pad) clamp(32px,3.4vw,48px);
   display:flex;
   flex-direction:column;
   align-items:center;
-  gap:var(--sp-cap);
+  gap:clamp(18px,1.9vw,28px);
 }
+.panel > .stage,.panel > figure{max-width:var(--l-hero-max)}
+.panel > figure{max-width:1100px}
 .panel .stage{width:100%;display:flex;justify-content:center;align-items:flex-start;gap:var(--sp-pair)}
 .panel .stage > figure{margin:0;flex:1 1 0;min-width:0;display:flex;flex-direction:column;gap:var(--sp-cap)}
 .panel figure{margin:0;width:100%;display:flex;flex-direction:column;gap:var(--sp-cap)}
@@ -356,8 +390,8 @@ p.lead-in{color:var(--c-mid)}
 .shot{
   width:100%;
   background:var(--c-white);
-  border:1px solid var(--c-shot-b);
-  border-radius:6px;
+  border:0;
+  border-radius:12px;
   overflow:hidden;
   display:flex;
   align-items:center;
@@ -369,10 +403,28 @@ p.lead-in{color:var(--c-mid)}
   text-transform:uppercase;
   text-align:center;
   padding:16px;
-  box-shadow:var(--shot-lift) var(--shot-lift) 3px rgba(0,0,0,.2);
+  box-shadow:0 0 0 1px rgba(14,20,25,.07),0 30px 60px -30px rgba(14,20,25,.28);
 }
-.shot.has-img{padding:0}
-.shot img{width:100%;height:100%;object-fit:cover;display:block}
+.shot.has-img{padding:0;display:block;aspect-ratio:auto}
+.shot img{width:100%;height:auto;display:block}
+/* browser bar */
+.shot.has-img::before{
+  content:"";display:block;height:30px;
+  border-bottom:1px solid #E3E6EA;
+  background:
+    radial-gradient(circle 5px at 18px 15px,#FF5F57 4.5px,transparent 5px),
+    radial-gradient(circle 5px at 36px 15px,#FEBC2E 4.5px,transparent 5px),
+    radial-gradient(circle 5px at 54px 15px,#28C840 4.5px,transparent 5px),
+    #F6F7F9;
+}
+@media (max-width:560px){
+  .shot.has-img::before{height:22px;background:
+    radial-gradient(circle 4px at 13px 11px,#FF5F57 3.5px,transparent 4px),
+    radial-gradient(circle 4px at 27px 11px,#FEBC2E 3.5px,transparent 4px),
+    radial-gradient(circle 4px at 41px 11px,#28C840 3.5px,transparent 4px),
+    #F6F7F9}
+  .shot{border-radius:8px}
+}
 
 /* aspect ratios — exact exported pixel dimensions */
 .ar-hero    {aspect-ratio:2432/1470}
@@ -393,9 +445,9 @@ figcaption, .cap{
   font-family:var(--f-body);
   font-size:var(--t-caption);
   line-height:1.45;
-  color:var(--c-mid);
+  color:#39434C;
   text-align:center;
-  margin-top:4px;
+  margin-top:6px;
 }
 
 /* narrower stages for tall or small figures */
@@ -452,13 +504,13 @@ footer{
   .panel.narrow .stage,.panel.mid .stage,.panel.tall .stage{max-width:100%}
 }
 @media (max-width:820px){
-  .record{grid-template-columns:1fr 1fr}
-  .jobs{grid-template-columns:1fr}
+  .record{max-width:none}
   .panel .stage{flex-direction:column;gap:var(--sp-cards)}
   .panel .stage > figure{width:100%}
 }
 @media (max-width:560px){
-  .record{grid-template-columns:1fr}
+  .hero-top{border-radius:20px}
+  .record > div{grid-template-columns:88px minmax(0,1fr)}
 }
 @media (prefers-reduced-motion:reduce){
   *{transition:none!important;animation:none!important}
@@ -613,17 +665,21 @@ footer{padding-bottom:calc(64px + 54px)}
 <!-- ======================= HERO ======================= -->
 <header class="hero">
   <div class="hero-inner">
-    <p class="mono eyebrow">Vertafore&nbsp; ·&nbsp; RiskMatch</p>
+    <div class="hero-top">
+      <div class="hero-text">
+        <p class="mono eyebrow">Vertafore&nbsp; ·&nbsp; RiskMatch</p>
 
-    <h1>Making Room for the Middle</h1>
-    <p class="sub">The full picture when you need it. The focus when it counts.</p>
+        <h1>Making Room for the Middle</h1>
+        <p class="sub">The full picture when you need it. The focus when it counts.</p>
+      </div>
 
-    <dl class="record">
-      <div><dt class="mono">Role</dt><dd>Lead UX Designer<br>Report and chart system</dd></div>
-      <div><dt class="mono">Timeline</dt><dd>1 year</dd></div>
-      <div><dt class="mono">Team</dt><dd>Product · Engineering<br>Research</dd></div>
-      <div><dt class="mono">Surface</dt><dd>Benefits Benchmarking<br>Desktop primary</dd></div>
-    </dl>
+      <dl class="record">
+        <div><dt>Role</dt><dd>Lead UX Designer<br>Report and chart system</dd></div>
+        <div><dt>Timeline</dt><dd>1 year</dd></div>
+        <div><dt>Team</dt><dd>Product · Engineering<br>Research</dd></div>
+        <div><dt>Surface</dt><dd>Benefits Benchmarking<br>Desktop primary</dd></div>
+      </dl>
+    </div>
 
     <div class="hero-media">
       <div class="hero-shot">
@@ -642,7 +698,7 @@ footer{padding-bottom:calc(64px + 54px)}
     <p class="sec-num">01. Framing</p>
     <div class="col">
       <h2>The information clients act on is in the middle, but the scale is set by the edges</h2>
-      <p>A benchmarking report answers a client's question: where do we stand in the market, and what are the openings for a different direction.</p>
+      <p>A benchmarking report answers a client's question: where do we stand in the market, and what are the openings for a different direction?</p>
       <p>The chart made it difficult to see where the valuable metrics were. In a high-stakes renewal meeting, squinting to make an approximation means the tool is not doing its job. The client also needed to see their value against their competition without losing the context of the full picture.</p>
       <p class="serif-emph">This is a case study about getting the middle of a distribution back without giving up the full range.</p>
     </div>
@@ -670,7 +726,7 @@ footer{padding-bottom:calc(64px + 54px)}
       <figure>
         <div class="shot ar-builder has-img">
           <img src="images/02-criteria-builder.png" width="1281" height="1568" loading="lazy"
-               alt="The same builder with a client, product, industry and category filters applied, narrowing the peer cohort.">
+               alt="The same builder with client, product, industry and category filters applied, narrowing the peer cohort.">
         </div>
       </figure>
     </div>
@@ -725,13 +781,13 @@ footer{padding-bottom:calc(64px + 54px)}
       </div>
       <div class="finding">
         <span class="tag">Needs the scale to stretch</span>
-        <p><strong>Emergency Room.</strong> The cohort runs $92 to $1,000, and a client sitting at $1,430 falls outside the market entirely. There is no position on the bar for that value, and it's the most decision-relevant number on the row. This means client pays more than any comparable plan in the cohort. This row needs the scale to stretch.</p>
+        <p><strong>Emergency Room.</strong> The cohort runs $92 to $1,000, and a client sitting at $1,430 falls outside the market entirely. There is no position on the bar for that value, and it's the most decision-relevant number on the row. This means the client pays more than any comparable plan in the cohort. This row needs the scale to stretch.</p>
       </div>
     </div>
 
     <div class="col">
       <h2>Pain points the chart needed to address</h2>
-      <p>Make the client's position clear in relation to the other indicators. A broker scans eight rows before reading any of them. Above or below the median, inside or outside the middle 50% are all positions that need to registered at a glance.</p>
+      <p>Make the client's position clear in relation to the other indicators. A broker scans eight rows before reading any of them. Above or below the median, inside or outside the middle 50%: these are positions that need to register at a glance.</p>
       <p>Keep the full context intact across ranges. A wide axis shows the true extent of the market but minimizes the part anyone acts on. A narrow axis separates the markers but cuts away context the broker may be asked about in the meeting.</p>
     </div>
   </section>
@@ -826,7 +882,7 @@ footer{padding-bottom:calc(64px + 54px)}
       <p><em>Full Range</em> shows the market's true extent, so a broker can see the whole spread of what the criteria produced.</p>
       <p><em>Middle 50%</em> rescales each row so the axis is the 25th-to-75th band. Annual Deductible &ndash; Individual goes from a $0&ndash;$22,500 axis to $250&ndash;$1,000, and the client at $329 separates cleanly from the median at $500.</p>
       <p>Nothing is hidden by default and nothing is hidden permanently. This is the distinction the bar break couldn't make: zoom in without excluding the rest of the data.</p>
-      <p><strong>The third layer was the endpoints.</strong> Changing the lowest and highest markers to the 5th and 95th percentile kept extreme outliers on the tail from breaking the chart in the first place.</p>
+      <p><strong>The third layer was the endpoints.</strong> Changing the lowest and highest markers to the 5th and 95th percentiles kept extreme outliers on the tail from breaking the chart in the first place.</p>
     </div>
   </section>
 
@@ -857,7 +913,7 @@ footer{padding-bottom:calc(64px + 54px)}
       <h2>Decisions that made it hold</h2>
       <p>The quiet client marker worked because the chart was already full. A second loud element would have turned every row into a competition. Making the client marker small meant the thing you read was the gap between it and the median, rather than two markers competing. The key let a reader register each symbol at a glance.</p>
       <p>The toggle worked because it took nothing away. Every earlier attempt at compression removed something: the bar break removed a region, a fixed zoom would have removed the tail. The toggle removes nothing. It changes which question the axis is answering, and the other view is one click back.</p>
-      <p>Moving the endpoints to the 5th and 95th percentile was a compromise, the true minimum and maximum are no longer on the bar, but it let one chart stay functional across very different data sets.</p>
+      <p>Moving the endpoints to the 5th and 95th percentiles was a compromise. The true minimum and maximum are no longer on the bar, but it let one chart stay functional across very different data sets.</p>
     </div>
   </section>
 
@@ -892,7 +948,7 @@ footer{padding-bottom:calc(64px + 54px)}
     <p class="sec-num">10. Thoughts</p>
     <div class="col">
       <h2>When one view has to answer two incompatible questions, adding encoding makes it worse</h2>
-      <p>Every fix I tried inside the chart, different markers, staggered labels, a break in the bar, was an attempt to fit two scales into one. Each one made the chart busier and the insight harder to pull out.</p>
+      <p>Every fix I tried inside the chart (different markers, staggered labels, a break in the bar) was an attempt to fit two scales into one. Each one made the chart busier and the insight harder to pull out.</p>
       <p>What worked was giving up on solving it in one place. The marks made position readable. The control let the reader choose which question they were asking.</p>
     </div>
   </section>
@@ -903,7 +959,7 @@ footer{padding-bottom:calc(64px + 54px)}
 <footer>
   <div class="foot">
     <span class="name">Nicholas Womack</span>
-    <span class="mono">Senior UX Designer</span>
+    <span class="mono">Product Design &amp; UX Strategist</span>
     <span class="mono"><a href="mailto:nicholasromone@gmail.com">nicholasromone@gmail.com</a></span>
     <span class="mono">New York, NY</span>
   </div>
