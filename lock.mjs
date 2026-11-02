@@ -80,6 +80,7 @@ button:disabled{opacity:.6;cursor:wait}
 </main>
 <script>
 (function(){
+  if(location.protocol==='http:'&&location.hostname!=='localhost'){location.replace('https://'+location.host+location.pathname+location.search+location.hash);return}
   var P=${JSON.stringify(payload)}, KEY='nw-protected-pw';
   var f=document.getElementById('f'), pw=document.getElementById('pw'), go=document.getElementById('go'), msg=document.getElementById('msg');
   function u8(s){return Uint8Array.from(atob(s),function(c){return c.charCodeAt(0)})}
@@ -94,7 +95,8 @@ button:disabled{opacity:.6;cursor:wait}
   if(saved){open(saved).catch(function(){try{sessionStorage.removeItem(KEY)}catch(e){}})}
   f.addEventListener('submit',function(e){
     e.preventDefault(); go.disabled=true; msg.textContent='';
-    open(pw.value).catch(function(){
+    if(!window.crypto||!crypto.subtle){go.disabled=false;msg.textContent='This browser cannot unlock the page. Open it at https://www.nicholaswomack.com/chase/ in an up to date browser.';return}
+    open(pw.value.trim()).catch(function(){
       go.disabled=false; pw.setAttribute('aria-invalid','true'); msg.textContent='That password is not correct. Try again.'; pw.select();
     });
   });
